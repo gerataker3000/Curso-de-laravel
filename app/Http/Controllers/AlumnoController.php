@@ -5,17 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAlumnoRequest;
 use App\Http\Requests\UpdateAlumnoRequest;
 use App\Models\Alumno;
+use App\Repositories\AlumnoRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class AlumnoController extends Controller
 {
     /**
+     * Laravel inyecta el repositorio registrado en AppServiceProvider.
+     */
+    public function __construct(private AlumnoRepositoryInterface $alumnos) {}
+
+    /**
      * Lista paginada de alumnos (GET /alumnos).
      */
     public function index(): View
     {
-        $alumnos = Alumno::query()->orderBy('nombre')->paginate(10);
+        $alumnos = $this->alumnos->paginar();
 
         return view('alumnos.index', compact('alumnos'));
     }
@@ -34,7 +40,7 @@ class AlumnoController extends Controller
      */
     public function store(StoreAlumnoRequest $request): RedirectResponse
     {
-        $alumno = Alumno::create($request->validated());
+        $alumno = $this->alumnos->crear($request->validated());
 
         return redirect()->route('alumnos.show', $alumno)
             ->with('exito', 'Alumno registrado correctamente.');
@@ -61,7 +67,7 @@ class AlumnoController extends Controller
      */
     public function update(UpdateAlumnoRequest $request, Alumno $alumno): RedirectResponse
     {
-        $alumno->update($request->validated());
+        $this->alumnos->actualizar($alumno, $request->validated());
 
         return redirect()->route('alumnos.show', $alumno)
             ->with('exito', 'Alumno actualizado correctamente.');
@@ -72,7 +78,7 @@ class AlumnoController extends Controller
      */
     public function destroy(Alumno $alumno): RedirectResponse
     {
-        $alumno->delete();
+        $this->alumnos->eliminar($alumno);
 
         return redirect()->route('alumnos.index')
             ->with('exito', 'Alumno eliminado.');

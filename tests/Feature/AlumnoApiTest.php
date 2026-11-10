@@ -3,12 +3,24 @@
 namespace Tests\Feature;
 
 use App\Models\Alumno;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class AlumnoApiTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * Desde el Bloque 8 la API exige token: simulamos uno con todos los permisos.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Sanctum::actingAs(User::factory()->create(), ['alumnos:leer', 'alumnos:escribir']);
+    }
 
     public function test_lista_alumnos_paginados_con_resource(): void
     {

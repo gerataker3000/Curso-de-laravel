@@ -3,7 +3,10 @@
 @section('titulo', 'Lista de alumnos')
 
 @section('contenido')
-    <h1 class="h3 mb-3">Alumnos</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Alumnos</h1>
+        <a href="{{ route('alumnos.create') }}" class="btn btn-primary">Nuevo alumno</a>
+    </div>
 
     <table class="table table-striped bg-white">
         <thead>
@@ -24,7 +27,10 @@
                     <td>{{ $alumno->correo }}</td>
                     <td>{{ $alumno->carrera }}</td>
                     <td>{{ $alumno->semestre }}</td>
-                    <td><a href="{{ route('alumnos.show', $alumno) }}" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                    <td class="text-nowrap">
+                        <a href="{{ route('alumnos.show', $alumno) }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                        <a href="{{ route('alumnos.edit', $alumno) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                    </td>
                 </tr>
             @empty
                 <tr><td colspan="6" class="text-center">No hay alumnos registrados.</td></tr>

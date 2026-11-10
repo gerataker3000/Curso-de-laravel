@@ -14,6 +14,10 @@
     </nav>
 
     <main class="container">
+        @if (session('exito'))
+            <div class="alert alert-success">{{ session('exito') }}</div>
+        @endif
+
         @yield('contenido')
     </main>
 </body>

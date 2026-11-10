@@ -10,6 +10,7 @@
             <tr>
                 <th>No. control</th>
                 <th>Nombre</th>
+                <th>Correo</th>
                 <th>Carrera</th>
                 <th>Semestre</th>
                 <th></th>
@@ -18,15 +19,18 @@
         <tbody>
             @forelse ($alumnos as $alumno)
                 <tr>
-                    <td>{{ $alumno['numero_control'] }}</td>
-                    <td>{{ $alumno['nombre'] }}</td>
-                    <td>{{ $alumno['carrera'] }}</td>
-                    <td>{{ $alumno['semestre'] }}</td>
-                    <td><a href="{{ route('alumnos.show', $alumno['id']) }}" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                    <td>{{ $alumno->numero_control }}</td>
+                    <td>{{ $alumno->nombre }}</td>
+                    <td>{{ $alumno->correo }}</td>
+                    <td>{{ $alumno->carrera }}</td>
+                    <td>{{ $alumno->semestre }}</td>
+                    <td><a href="{{ route('alumnos.show', $alumno) }}" class="btn btn-sm btn-outline-primary">Ver</a></td>
                 </tr>
             @empty
-                <tr><td colspan="5" class="text-center">No hay alumnos registrados.</td></tr>
+                <tr><td colspan="6" class="text-center">No hay alumnos registrados.</td></tr>
             @endforelse
         </tbody>
     </table>
+
+    {{ $alumnos->links() }}
 @endsection

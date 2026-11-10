@@ -2,43 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alumno;
 use Illuminate\View\View;
 
 class AlumnoController extends Controller
 {
     /**
-     * Lista de alumnos (GET /alumnos).
+     * Lista paginada de alumnos (GET /alumnos).
      */
     public function index(): View
     {
-        $alumnos = $this->alumnos();
+        $alumnos = Alumno::query()->orderBy('nombre')->paginate(10);
 
         return view('alumnos.index', compact('alumnos'));
     }
 
     /**
      * Detalle de un alumno (GET /alumnos/{alumno}).
+     * Route Model Binding: Laravel busca el Alumno por id o responde 404.
      */
-    public function show(int $alumno): View
+    public function show(Alumno $alumno): View
     {
-        $encontrado = collect($this->alumnos())->firstWhere('id', $alumno);
-
-        abort_if($encontrado === null, 404);
-
-        return view('alumnos.show', ['alumno' => $encontrado]);
-    }
-
-    /**
-     * Datos de ejemplo escritos a mano. En el Bloque 4 se reemplazan por el modelo Alumno.
-     *
-     * @return array<int, array{id: int, numero_control: string, nombre: string, carrera: string, semestre: int}>
-     */
-    private function alumnos(): array
-    {
-        return [
-            ['id' => 1, 'numero_control' => '21510001', 'nombre' => 'Ana López', 'carrera' => 'Sistemas Computacionales', 'semestre' => 5],
-            ['id' => 2, 'numero_control' => '21510002', 'nombre' => 'Carlos Pérez', 'carrera' => 'Industrial', 'semestre' => 3],
-            ['id' => 3, 'numero_control' => '21510003', 'nombre' => 'María Hernández', 'carrera' => 'Gestión Empresarial', 'semestre' => 7],
-        ];
+        return view('alumnos.show', compact('alumno'));
     }
 }
